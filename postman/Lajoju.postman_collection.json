@@ -1,0 +1,554 @@
+{
+  "info": {
+    "_postman_id": "5ebd1580-4779-4c6d-879b-297c9883c714",
+    "name": "Lajoju API",
+    "description": "Coleção para testar os serviços Lajoju. Inicie os serviços com Docker Compose e execute primeiro a sequência de autenticação. Os IDs e o token são armazenados automaticamente nas variáveis da coleção.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "usuarioUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "produtoUrl",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "agendamentoUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "clienteId",
+      "value": ""
+    },
+    {
+      "key": "funcionarioId",
+      "value": ""
+    },
+    {
+      "key": "produtoId",
+      "value": ""
+    },
+    {
+      "key": "agendamentoId",
+      "value": ""
+    },
+    {
+      "key": "clienteEmail",
+      "value": ""
+    },
+    {
+      "key": "senha",
+      "value": "senha-teste-123"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticação",
+      "item": [
+        {
+          "name": "Cadastrar cliente",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('clienteEmail', `cliente.${Date.now()}@exemplo.com`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Cliente cadastrado', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('clienteId', body.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cliente Postman\",\n  \"email\": \"{{clienteEmail}}\",\n  \"password\": \"{{senha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{usuarioUrl}}/auth/register",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login realizado', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('token', body.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{clienteEmail}}\",\n  \"password\": \"{{senha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{usuarioUrl}}/auth/login",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuários e funcionários",
+      "item": [
+        {
+          "name": "Listar usuários",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{usuarioUrl}}/usuarios",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar cliente cadastrado",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{usuarioUrl}}/usuarios/{{clienteId}}",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{clienteId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar funcionário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Funcionário criado', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('funcionarioId', body.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Funcionário Postman\",\n  \"email\": \"funcionario.{{clienteEmail}}\",\n  \"password\": \"{{senha}}\",\n  \"flgFuncionario\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{usuarioUrl}}/usuarios",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar funcionário",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Funcionário Postman Atualizado\",\n  \"email\": \"funcionario.{{clienteEmail}}\",\n  \"password\": \"{{senha}}\",\n  \"flgFuncionario\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{usuarioUrl}}/usuarios/{{funcionarioId}}",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{funcionarioId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produtos/serviços",
+      "item": [
+        {
+          "name": "Listar produtos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{produtoUrl}}/produtos",
+              "host": [
+                "{{produtoUrl}}"
+              ],
+              "path": [
+                "produtos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar serviço",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Serviço criado', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('produtoId', body.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Corte Postman\",\n  \"tempoMedioMinutos\": 45,\n  \"price\": 35.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{produtoUrl}}/produtos",
+              "host": [
+                "{{produtoUrl}}"
+              ],
+              "path": [
+                "produtos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar serviço",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{produtoUrl}}/produtos/{{produtoId}}",
+              "host": [
+                "{{produtoUrl}}"
+              ],
+              "path": [
+                "produtos",
+                "{{produtoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar serviço",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Corte Postman Atualizado\",\n  \"tempoMedioMinutos\": 50,\n  \"price\": 40.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{produtoUrl}}/produtos/{{produtoId}}",
+              "host": [
+                "{{produtoUrl}}"
+              ],
+              "path": [
+                "produtos",
+                "{{produtoId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agendamentos",
+      "item": [
+        {
+          "name": "Criar agendamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Agendamento criado', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('agendamentoId', body.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{clienteId}}\",\n  \"funcionarioId\": \"{{funcionarioId}}\",\n  \"produtoId\": \"{{produtoId}}\",\n  \"data\": \"2030-10-20\",\n  \"horaInicio\": \"09:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{agendamentoUrl}}/agendamentos",
+              "host": [
+                "{{agendamentoUrl}}"
+              ],
+              "path": [
+                "agendamentos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar agendamentos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{agendamentoUrl}}/agendamentos",
+              "host": [
+                "{{agendamentoUrl}}"
+              ],
+              "path": [
+                "agendamentos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar agendamento",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{agendamentoUrl}}/agendamentos/{{agendamentoId}}",
+              "host": [
+                "{{agendamentoUrl}}"
+              ],
+              "path": [
+                "agendamentos",
+                "{{agendamentoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar agendamento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{clienteId}}\",\n  \"funcionarioId\": \"{{funcionarioId}}\",\n  \"produtoId\": \"{{produtoId}}\",\n  \"data\": \"2030-10-20\",\n  \"horaInicio\": \"10:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{agendamentoUrl}}/agendamentos/{{agendamentoId}}",
+              "host": [
+                "{{agendamentoUrl}}"
+              ],
+              "path": [
+                "agendamentos",
+                "{{agendamentoId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Limpeza (opcional)",
+      "description": "Execute depois dos testes. Exclua o agendamento antes do serviço e do funcionário associados.",
+      "item": [
+        {
+          "name": "Excluir agendamento",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{agendamentoUrl}}/agendamentos/{{agendamentoId}}",
+              "host": [
+                "{{agendamentoUrl}}"
+              ],
+              "path": [
+                "agendamentos",
+                "{{agendamentoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Excluir serviço",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{produtoUrl}}/produtos/{{produtoId}}",
+              "host": [
+                "{{produtoUrl}}"
+              ],
+              "path": [
+                "produtos",
+                "{{produtoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Excluir funcionário",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{usuarioUrl}}/usuarios/{{funcionarioId}}",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{funcionarioId}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

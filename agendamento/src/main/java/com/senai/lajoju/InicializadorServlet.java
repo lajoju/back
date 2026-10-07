@@ -3,11 +3,11 @@ package com.senai.lajoju;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-public class ServletInitializer extends SpringBootServletInitializer {
+public class InicializadorServlet extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(LajojuApplication.class);
+		return application.sources(AplicacaoLajoju.class);
 	}
 
 }

@@ -1,0 +1,95 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lajoju}
+      POSTGRES_USER: ${POSTGRES_USER:-lajoju}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lajoju}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init-schemas.sql:/docker-entrypoint-initdb.d/01-init-schemas.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  usuario:
+    build:
+      context: ./usuario
+      dockerfile: Dockerfile
+    environment:
+      SERVER_PORT: 8080
+      SECURITY_JWT_PRIVATE_KEY_LOCATION: file:/run/secrets/jwt_private_key
+      SECURITY_JWT_PUBLIC_KEY_LOCATION: file:/run/secrets/jwt_public_key
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-lajoju}?currentSchema=usuario
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-lajoju}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-lajoju}
+      DB_SCHEMA: usuario
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    secrets:
+      - jwt_private_key
+      - jwt_public_key
+    restart: unless-stopped
+
+  produto:
+    build:
+      context: ./produto
+      dockerfile: Dockerfile
+    environment:
+      SERVER_PORT: 8080
+      SECURITY_JWT_PUBLIC_KEY_LOCATION: file:/run/secrets/jwt_public_key
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-lajoju}?currentSchema=produto
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-lajoju}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-lajoju}
+      DB_SCHEMA: produto
+    ports:
+      - "8082:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    secrets:
+      - jwt_public_key
+    restart: unless-stopped
+
+  agendamento:
+    build:
+      context: ./agendamento
+      dockerfile: Dockerfile
+    environment:
+      SERVER_PORT: 8080
+      SECURITY_JWT_PUBLIC_KEY_LOCATION: file:/run/secrets/jwt_public_key
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-lajoju}?currentSchema=agendamento
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-lajoju}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-lajoju}
+      DB_SCHEMA: agendamento
+      USUARIO_SERVICE_URL: http://usuario:8080
+      PRODUTO_SERVICE_URL: http://produto:8080
+    ports:
+      - "8083:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      usuario:
+        condition: service_started
+      produto:
+        condition: service_started
+    secrets:
+      - jwt_public_key
+    restart: unless-stopped
+
+secrets:
+  jwt_private_key:
+    file: ./secrets/jwt-private.pem
+  jwt_public_key:
+    file: ./secrets/jwt-public.pem
+
+volumes:
+  postgres_data:

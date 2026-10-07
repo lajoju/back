@@ -1,0 +1,7 @@
+CREATE TABLE usuarios (
+    id UUID PRIMARY KEY,
+    email VARCHAR(320) NOT NULL UNIQUE,
+    nome VARCHAR(120) NOT NULL,
+    hash_senha VARCHAR(100) NOT NULL,
+    flg_funcionario BOOLEAN NOT NULL DEFAULT FALSE
+);
