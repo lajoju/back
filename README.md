@@ -102,7 +102,8 @@ internamente na porta `8080`.
 
 O Compose inicia PostgreSQL 17 e cria um banco (`lajoju`) com três schemas:
 `usuario`, `produto` e `agendamento`. O script
-`infra/postgres/init-schemas.sql` cria os schemas na inicialização do banco.
+`usuario/src/main/resources/db/init-schemas.sql` cria os schemas na
+inicialização do banco.
 Cada aplicação executa suas migrações Flyway no próprio schema.
 
 As variáveis lidas do `.env` são:
