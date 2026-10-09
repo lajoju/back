@@ -10,12 +10,11 @@ Para a execução recomendada com Docker Compose:
 
 - Docker Desktop instalado e em execução (ou Docker Engine em Linux).
 - Docker Compose v2 disponível como `docker compose`.
-- Node.js 18 ou superior, usado somente para gerar as chaves RSA na primeira
-  preparação da máquina.
+- JDK 25, necessário para gerar as chaves RSA com as APIs criptográficas nativas
+  do Java.
 
-Java 25 e Maven são necessários apenas para executar os serviços ou testes
-diretamente no host. Os Dockerfiles usam Java 25 e Maven para compilar as
-imagens.
+Maven é necessário apenas para executar os serviços ou testes diretamente no
+host. Os Dockerfiles usam Java 25 e Maven para compilar as imagens.
 
 ## Preparação inicial
 
@@ -24,7 +23,7 @@ Execute os passos abaixo na raiz do repositório.
 1. Gere o par RSA, se os arquivos ainda não existirem:
 
    ```powershell
-   node scripts/generate-jwt-keys.mjs
+   java usuario/src/main/java/com/senai/lajoju/security/GeradorChavesJwt.java
    ```
 
    O comando cria `secrets/jwt-private.pem` e `secrets/jwt-public.pem`.
@@ -145,7 +144,7 @@ Rotacione as chaves somente quando necessário. Faça backup seguro do par
 existente e então execute:
 
 ```powershell
-node scripts/generate-jwt-keys.mjs --force
+java usuario/src/main/java/com/senai/lajoju/security/GeradorChavesJwt.java --force
 docker compose up --build -d
 ```
 
