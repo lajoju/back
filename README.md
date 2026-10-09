@@ -2,6 +2,9 @@
 
 Backend com três serviços Spring Boot: `usuario`, `produto` e `agendamento`.
 Usa PostgreSQL com schemas separados e autenticação JWT RS256.
+As migrations Flyway inserem exemplos fictícios (nomes públicos de atores,
+e-mails reservados e serviços) em qualquer ambiente. As contas de exemplo não
+têm senha de login conhecida; use `/auth/register` para criar uma conta de teste.
 
 ## Executar
 

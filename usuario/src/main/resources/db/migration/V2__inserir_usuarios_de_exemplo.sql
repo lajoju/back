@@ -1,0 +1,22 @@
+-- Registros ficticios com nomes de atores de cinema independente/cult.
+INSERT INTO usuarios (id, email, nome, hash_senha, flg_funcionario) VALUES
+    ('00000000-0000-4000-8000-000000000001', 'parker.posey@example.invalid', 'Parker Posey', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000002', 'fairuza.balk@example.invalid', 'Fairuza Balk', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000003', 'natasha.lyonne@example.invalid', 'Natasha Lyonne', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000004', 'chloe.sevigny@example.invalid', 'Chloe Sevigny', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000005', 'shannyn.sossamon@example.invalid', 'Shannyn Sossamon', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000006', 'christina.ricci@example.invalid', 'Christina Ricci', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000007', 'michael.pitt@example.invalid', 'Michael Pitt', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000008', 'vincent.gallo@example.invalid', 'Vincent Gallo', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000009', 'crispin.glover@example.invalid', 'Crispin Glover', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000010', 'steve.buscemi@example.invalid', 'Steve Buscemi', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', FALSE),
+    ('00000000-0000-4000-8000-000000000011', 'elijah.wood@example.invalid', 'Elijah Wood', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000012', 'matthew.lillard@example.invalid', 'Matthew Lillard', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000013', 'sam.rockwell@example.invalid', 'Sam Rockwell', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000014', 'michael.shannon@example.invalid', 'Michael Shannon', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000015', 'patricia.arquette@example.invalid', 'Patricia Arquette', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000016', 'juliette.lewis@example.invalid', 'Juliette Lewis', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000017', 'asia.argento@example.invalid', 'Asia Argento', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000018', 'rose.mcgowan@example.invalid', 'Rose McGowan', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000019', 'devon.sawa@example.invalid', 'Devon Sawa', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE),
+    ('00000000-0000-4000-8000-000000000020', 'john.reilly@example.invalid', 'John C. Reilly', '$2a$10$/MbxpOeeUczW4bbMaiXQ/.OJKPPEpqlo/7IE.5ULejcXNfuFTGhX6', TRUE);
