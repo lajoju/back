@@ -38,7 +38,7 @@ também apaga o banco persistido.
 | `usuario` | `http://localhost:8081` | Usuários, login e emissão de JWT |
 | `produto` | `http://localhost:8082` | Serviços oferecidos |
 | `agendamento` | `http://localhost:8083` | Agendamentos |
-| PostgreSQL | `localhost:5433` | Banco com schemas `usuario`, `produto` e `agendamento` |
+| PostgreSQL | `localhost:5434` | Banco com schemas `usuario`, `produto` e `agendamento` |
 
 Cadastro e login (`POST /auth/register` e `POST /auth/login`) são públicos.
 Os demais endpoints exigem o JWT no cabeçalho `Authorization`, usando o esquema
