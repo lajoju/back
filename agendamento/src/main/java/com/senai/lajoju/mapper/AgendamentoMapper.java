@@ -1,14 +1,14 @@
 package com.senai.lajoju.mapper;
 
-import com.senai.lajoju.dto.RespostaAgendamento;
+import com.senai.lajoju.dto.AgendamentoResponse;
 import com.senai.lajoju.model.Agendamento;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MapeadorAgendamento {
+public class AgendamentoMapper {
 
-	public RespostaAgendamento toResponse(Agendamento appointment) {
-		return new RespostaAgendamento(
+	public AgendamentoResponse toResponse(Agendamento appointment) {
+		return new AgendamentoResponse(
 				appointment.getIdentificador(),
 				appointment.getUsuarioId(),
 				appointment.getFuncionarioId(),

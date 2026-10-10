@@ -3,9 +3,9 @@ package com.senai.lajoju.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.senai.lajoju.dto.RequisicaoAgendamento;
-import com.senai.lajoju.dto.RespostaAgendamento;
-import com.senai.lajoju.service.ServicoAgendamento;
+import com.senai.lajoju.dto.AgendamentoRequest;
+import com.senai.lajoju.dto.AgendamentoResponse;
+import com.senai.lajoju.service.AgendamentoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,31 +28,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AgendamentoController {
 
-	private final ServicoAgendamento appointmentService;
+	private final AgendamentoService appointmentService;
 
 	@GetMapping
-	public List<RespostaAgendamento> findAll() {
+	public List<AgendamentoResponse> findAll() {
 		return appointmentService.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public RespostaAgendamento findById(@PathVariable UUID id) {
+	public AgendamentoResponse findById(@PathVariable UUID id) {
 		return appointmentService.findById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public RespostaAgendamento create(
-			@Valid @RequestBody RequisicaoAgendamento request,
+	public AgendamentoResponse create(
+			@Valid @RequestBody AgendamentoRequest request,
 			@RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken,
 			@AuthenticationPrincipal Jwt jwt) {
 		return appointmentService.create(request, bearerToken, jwt.getSubject());
 	}
 
 	@PutMapping("/{id}")
-	public RespostaAgendamento update(
+	public AgendamentoResponse update(
 			@PathVariable UUID id,
-			@Valid @RequestBody RequisicaoAgendamento request,
+			@Valid @RequestBody AgendamentoRequest request,
 			@RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken,
 			@AuthenticationPrincipal Jwt jwt) {
 		return appointmentService.update(id, request, bearerToken, jwt.getSubject());

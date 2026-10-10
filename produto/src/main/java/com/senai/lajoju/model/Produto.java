@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "servicos")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Servico {
+public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -33,7 +33,7 @@ public class Servico {
 	@Column(name = "preco", nullable = false, precision = 10, scale = 2)
 	private BigDecimal preco;
 
-	public Servico(String nome, int tempoMedioMinutos, BigDecimal preco) {
+	public Produto(String nome, int tempoMedioMinutos, BigDecimal preco) {
 		this.nome = nome;
 		this.tempoMedioMinutos = tempoMedioMinutos;
 		this.preco = preco;
