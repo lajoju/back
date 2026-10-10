@@ -3,9 +3,9 @@ package com.senai.lajoju.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.senai.lajoju.dto.RequisicaoServico;
-import com.senai.lajoju.dto.RespostaServico;
-import com.senai.lajoju.service.CatalogoServicos;
+import com.senai.lajoju.dto.ProdutoRequest;
+import com.senai.lajoju.dto.ProdutoResponse;
+import com.senai.lajoju.service.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,28 +22,28 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/produtos")
 @RequiredArgsConstructor
-public class ServicoController {
+public class ProdutoController {
 
-	private final CatalogoServicos productService;
+	private final ProdutoService productService;
 
 	@GetMapping
-	public List<RespostaServico> findAll() {
+	public List<ProdutoResponse> findAll() {
 		return productService.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public RespostaServico findById(@PathVariable UUID id) {
+	public ProdutoResponse findById(@PathVariable UUID id) {
 		return productService.findById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public RespostaServico create(@Valid @RequestBody RequisicaoServico request) {
+	public ProdutoResponse create(@Valid @RequestBody ProdutoRequest request) {
 		return productService.create(request);
 	}
 
 	@PutMapping("/{id}")
-	public RespostaServico update(@PathVariable UUID id, @Valid @RequestBody RequisicaoServico request) {
+	public ProdutoResponse update(@PathVariable UUID id, @Valid @RequestBody ProdutoRequest request) {
 		return productService.update(id, request);
 	}
 

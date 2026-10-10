@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 
-public record RequisicaoAgendamento(
+public record AgendamentoRequest(
 		@NotNull UUID usuarioId,
 		@NotNull UUID funcionarioId,
 		@NotNull UUID produtoId,

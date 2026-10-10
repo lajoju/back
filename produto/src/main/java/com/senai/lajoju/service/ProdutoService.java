@@ -3,11 +3,11 @@ package com.senai.lajoju.service;
 import java.util.List;
 import java.util.UUID;
 
-import com.senai.lajoju.dto.RequisicaoServico;
-import com.senai.lajoju.dto.RespostaServico;
-import com.senai.lajoju.mapper.MapeadorServico;
-import com.senai.lajoju.model.Servico;
-import com.senai.lajoju.repository.RepositorioServico;
+import com.senai.lajoju.dto.ProdutoRequest;
+import com.senai.lajoju.dto.ProdutoResponse;
+import com.senai.lajoju.mapper.ProdutoMapper;
+import com.senai.lajoju.model.Produto;
+import com.senai.lajoju.repository.ProdutoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,29 +16,29 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CatalogoServicos {
+public class ProdutoService {
 
-	private final RepositorioServico products;
-	private final MapeadorServico mapper;
+	private final ProdutoRepository products;
+	private final ProdutoMapper mapper;
 
 	@Transactional(readOnly = true)
-	public List<RespostaServico> findAll() {
+	public List<ProdutoResponse> findAll() {
 		return products.findAll().stream().map(mapper::toResponse).toList();
 	}
 
 	@Transactional(readOnly = true)
-	public RespostaServico findById(UUID id) {
+	public ProdutoResponse findById(UUID id) {
 		return mapper.toResponse(findProduct(id));
 	}
 
 	@Transactional
-	public RespostaServico create(RequisicaoServico request) {
+	public ProdutoResponse create(ProdutoRequest request) {
 		return mapper.toResponse(products.saveAndFlush(mapper.toModel(request)));
 	}
 
 	@Transactional
-	public RespostaServico update(UUID id, RequisicaoServico request) {
-		Servico product = findProduct(id);
+	public ProdutoResponse update(UUID id, ProdutoRequest request) {
+		Produto product = findProduct(id);
 		mapper.update(product, request);
 		return mapper.toResponse(products.save(product));
 	}
@@ -48,7 +48,7 @@ public class CatalogoServicos {
 		products.delete(findProduct(id));
 	}
 
-	private Servico findProduct(UUID id) {
+	private Produto findProduct(UUID id) {
 		return products.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado."));
 	}
