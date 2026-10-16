@@ -1,20 +1,15 @@
 # Lajoju API
 
 Backend com três serviços Spring Boot: `usuario`, `produto` e `agendamento`.
-Usa PostgreSQL com schemas separados e autenticação JWT RS256.
+Usa PostgreSQL com schemas separados e autenticação JWT RS256. As chaves RSA
+JWT estão definidas no código, em `Constants.java` de cada serviço.
 As migrations Flyway inserem exemplos fictícios (nomes públicos de atores,
 e-mails reservados e serviços) em qualquer ambiente. As contas de exemplo não
 têm senha de login conhecida; use `/auth/register` para criar uma conta de teste.
 
 ## Executar
 
-Requisitos: Docker Compose v2 e JDK 25 (para gerar as chaves).
-
-Na raiz do projeto, gere as chaves RSA uma vez:
-
-```powershell
-java usuario/src/main/java/com/senai/lajoju/security/GeradorChavesJwt.java
-```
+Requisitos: Docker Compose v2.
 
 Crie o `.env` e ajuste a senha do banco:
 
@@ -43,8 +38,9 @@ também apaga o banco persistido.
 Cadastro e login (`POST /auth/register` e `POST /auth/login`) são públicos.
 Os demais endpoints exigem o JWT no cabeçalho `Authorization`, usando o esquema
 Bearer. O serviço `usuario` assina tokens com a chave privada; os serviços
-validam com a chave pública.
-Não versione nem compartilhe a pasta `secrets/` ou a chave privada.
+validam com a chave pública. Como a chave privada está embutida no código, essa
+configuração é adequada apenas para desenvolvimento e demonstração; não a use
+em produção.
 
 ## Documentação e testes
 

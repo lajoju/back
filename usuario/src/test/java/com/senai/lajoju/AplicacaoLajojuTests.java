@@ -17,8 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(properties = {
-		"security.jwt.private-key-location=classpath:jwt-test-private.pem",
-		"security.jwt.public-key-location=classpath:jwt-test-public.pem",
 		"spring.datasource.url=jdbc:h2:mem:lajoju;DB_CLOSE_DELAY=-1",
 		"spring.datasource.driver-class-name=org.h2.Driver",
 		"spring.datasource.username=sa",

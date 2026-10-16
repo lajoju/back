@@ -1,8 +1,5 @@
 package com.senai.lajoju.security;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
@@ -16,10 +13,8 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -58,31 +53,29 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	RSAPublicKey jwtPublicKey(
-			@Value("${security.jwt.public-key-location:file:../secrets/jwt-public.pem}") Resource resource) {
+	RSAPublicKey jwtPublicKey() {
 		try {
 			RSAPublicKey key = (RSAPublicKey) KeyFactory.getInstance("RSA")
-					.generatePublic(new X509EncodedKeySpec(decodePem(resource, "PUBLIC KEY")));
+					.generatePublic(new X509EncodedKeySpec(decodePem(Constants.JWT_PUBLIC_KEY, "PUBLIC KEY")));
 			if (key.getModulus().bitLength() < 2048) {
 				throw new IllegalStateException("JWT RSA keys must be at least 2048 bits.");
 			}
 			return key;
-		} catch (IOException | GeneralSecurityException | IllegalArgumentException exception) {
+		} catch (GeneralSecurityException | IllegalArgumentException exception) {
 			throw new IllegalStateException("Unable to load JWT RSA public key.", exception);
 		}
 	}
 
 	@Bean
-	RSAPrivateKey jwtPrivateKey(
-			@Value("${security.jwt.private-key-location:file:../secrets/jwt-private.pem}") Resource resource) {
+	RSAPrivateKey jwtPrivateKey() {
 		try {
 			RSAPrivateKey key = (RSAPrivateKey) KeyFactory.getInstance("RSA")
-					.generatePrivate(new PKCS8EncodedKeySpec(decodePem(resource, "PRIVATE KEY")));
+					.generatePrivate(new PKCS8EncodedKeySpec(decodePem(Constants.JWT_PRIVATE_KEY, "PRIVATE KEY")));
 			if (key.getModulus().bitLength() < 2048) {
 				throw new IllegalStateException("JWT RSA keys must be at least 2048 bits.");
 			}
 			return key;
-		} catch (IOException | GeneralSecurityException | IllegalArgumentException exception) {
+		} catch (GeneralSecurityException | IllegalArgumentException exception) {
 			throw new IllegalStateException("Unable to load JWT RSA private key.", exception);
 		}
 	}
@@ -116,11 +109,7 @@ public class SecurityConfig {
 		return Clock.systemUTC();
 	}
 
-	private static byte[] decodePem(Resource resource, String keyType) throws IOException {
-		String pem;
-		try (InputStream input = resource.getInputStream()) {
-			pem = new String(input.readAllBytes(), StandardCharsets.US_ASCII);
-		}
+	private static byte[] decodePem(String pem, String keyType) {
 		String body = pem
 				.replace("-----BEGIN " + keyType + "-----", "")
 				.replace("-----END " + keyType + "-----", "");

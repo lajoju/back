@@ -1,17 +1,13 @@
 package com.senai.lajoju.security;
 
-import java.nio.charset.StandardCharsets;
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,11 +38,9 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	RSAPublicKey jwtPublicKey(
-			@Value("${security.jwt.public-key-location:file:../secrets/jwt-public.pem}") Resource resource) {
+	RSAPublicKey jwtPublicKey() {
 		try {
-			String pem = new String(resource.getInputStream().readAllBytes(), StandardCharsets.US_ASCII);
-			String body = pem.replace("-----BEGIN PUBLIC KEY-----", "")
+			String body = Constants.JWT_PUBLIC_KEY.replace("-----BEGIN PUBLIC KEY-----", "")
 					.replace("-----END PUBLIC KEY-----", "");
 			byte[] encodedKey = Base64.getMimeDecoder().decode(body);
 			RSAPublicKey key = (RSAPublicKey) KeyFactory.getInstance("RSA")
@@ -55,7 +49,7 @@ public class SecurityConfig {
 				throw new IllegalStateException("JWT RSA public keys must be at least 2048 bits.");
 			}
 			return key;
-		} catch (IOException | GeneralSecurityException | IllegalArgumentException exception) {
+		} catch (GeneralSecurityException | IllegalArgumentException exception) {
 			throw new IllegalStateException("Unable to load JWT RSA public key.", exception);
 		}
 	}
