@@ -42,11 +42,10 @@ public class Usuario {
 		this.flgFuncionario = flgFuncionario;
 	}
 
-	public void update(String nome, String email, String hashSenha, boolean flgFuncionario) {
+	public void updateProfile(String nome, String email, String hashSenha) {
 		this.nome = nome;
 		this.email = email;
 		this.hashSenha = hashSenha;
-		this.flgFuncionario = flgFuncionario;
 	}
 
 	public UUID getIdentificador() {

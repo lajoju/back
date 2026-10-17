@@ -39,8 +39,8 @@ public class AgendamentoService {
 	}
 
 	@Transactional
-	public AgendamentoResponse create(AgendamentoRequest request, String bearerToken, String authenticatedEmail) {
-		Agendamento appointment = toAppointment(request, bearerToken, authenticatedEmail);
+	public AgendamentoResponse create(AgendamentoRequest request, String bearerToken, UUID authenticatedUserId) {
+		Agendamento appointment = toAppointment(request, bearerToken, authenticatedUserId);
 		if (appointments.existsByFuncionarioIdAndDataAndHoraInicioLessThanAndHoraFimGreaterThan(
 				appointment.getFuncionarioId(), appointment.getData(),
 				appointment.getHoraFim(), appointment.getHoraInicio())) {
@@ -51,9 +51,9 @@ public class AgendamentoService {
 
 	@Transactional
 	public AgendamentoResponse update(
-            UUID id, AgendamentoRequest request, String bearerToken, String authenticatedEmail) {
+            UUID id, AgendamentoRequest request, String bearerToken, UUID authenticatedUserId) {
 		Agendamento appointment = findAppointment(id);
-		Agendamento updated = toAppointment(request, bearerToken, authenticatedEmail);
+		Agendamento updated = toAppointment(request, bearerToken, authenticatedUserId);
 		if (appointments.existsByFuncionarioIdAndDataAndHoraInicioLessThanAndHoraFimGreaterThanAndIdNot(
 				updated.getFuncionarioId(), updated.getData(), updated.getHoraFim(),
 				updated.getHoraInicio(), id)) {
@@ -75,13 +75,12 @@ public class AgendamentoService {
 	}
 
 	private Agendamento toAppointment(
-            AgendamentoRequest request, String bearerToken, String authenticatedEmail) {
-		UsuarioRemotoResponse user = fetchUser(request.usuarioId(), bearerToken);
-		if (authenticatedEmail == null || !user.email().equalsIgnoreCase(authenticatedEmail)) {
+            AgendamentoRequest request, String bearerToken, UUID authenticatedUserId) {
+		if (!request.usuarioId().equals(authenticatedUserId)) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Só é permitido agendar para o usuário autenticado.");
 		}
 
-		UsuarioRemotoResponse employee = fetchUser(request.funcionarioId(), bearerToken);
+		UsuarioRemotoResponse employee = fetchEmployeeStatus(request.funcionarioId(), bearerToken);
 		if (!employee.flgFuncionario()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O usuário selecionado não é funcionário.");
 		}
@@ -103,13 +102,13 @@ public class AgendamentoService {
 				request.data(), request.horaInicio(), endTime);
 	}
 
-	private UsuarioRemotoResponse fetchUser(UUID id, String bearerToken) {
+	private UsuarioRemotoResponse fetchEmployeeStatus(UUID id, String bearerToken) {
 		try {
-			UsuarioRemotoResponse user = userClient.getUser(id, bearerToken);
-			if (user == null || user.email() == null) {
+			UsuarioRemotoResponse employee = userClient.getEmployeeStatus(id, bearerToken);
+			if (employee == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Resposta inválida do serviço usuário.");
 			}
-			return user;
+			return employee;
 		} catch (HttpClientErrorException.NotFound exception) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário referenciado não existe.", exception);
 		} catch (RestClientException exception) {
