@@ -3,7 +3,7 @@ package com.senai.lajoju.controller;
 import com.senai.lajoju.dto.LoginRequest;
 import com.senai.lajoju.dto.RegisterRequest;
 import com.senai.lajoju.dto.TokenResponse;
-import com.senai.lajoju.dto.RespostaUsuario;
+import com.senai.lajoju.dto.UsuarioResponse;
 import com.senai.lajoju.service.AuthService;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +25,7 @@ public class AuthController {
 	@PostMapping("/register")
 	@Operation(security = {})
 	@ResponseStatus(HttpStatus.CREATED)
-	public RespostaUsuario register(@Valid @RequestBody RegisterRequest request) {
+	public UsuarioResponse register(@Valid @RequestBody RegisterRequest request) {
 		return authService.register(request);
 	}
 

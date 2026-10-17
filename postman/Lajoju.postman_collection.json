@@ -170,81 +170,23 @@
       "name": "Usuários e funcionários",
       "item": [
         {
-          "name": "Listar usuários",
+          "name": "Consultar meu perfil",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{usuarioUrl}}/usuarios",
-              "host": [
-                "{{usuarioUrl}}"
-              ],
-              "path": [
-                "usuarios"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Consultar cliente cadastrado",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{usuarioUrl}}/usuarios/{{clienteId}}",
+              "raw": "{{usuarioUrl}}/usuarios/me",
               "host": [
                 "{{usuarioUrl}}"
               ],
               "path": [
                 "usuarios",
-                "{{clienteId}}"
+                "me"
               ]
             }
           }
         },
         {
-          "name": "Criar funcionário",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Funcionário criado', () => pm.response.to.have.status(201));",
-                  "const body = pm.response.json();",
-                  "pm.collectionVariables.set('funcionarioId', body.id);"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Funcionário Postman\",\n  \"email\": \"funcionario.{{clienteEmail}}\",\n  \"password\": \"{{senha}}\",\n  \"flgFuncionario\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{usuarioUrl}}/usuarios",
-              "host": [
-                "{{usuarioUrl}}"
-              ],
-              "path": [
-                "usuarios"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Atualizar funcionário",
+          "name": "Atualizar meu perfil",
           "request": {
             "method": "PUT",
             "header": [
@@ -255,7 +197,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Funcionário Postman Atualizado\",\n  \"email\": \"funcionario.{{clienteEmail}}\",\n  \"password\": \"{{senha}}\",\n  \"flgFuncionario\": true\n}",
+              "raw": "{\n  \"name\": \"Cliente Postman Atualizado\",\n  \"email\": \"{{clienteEmail}}\",\n  \"password\": \"{{senha}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -263,13 +205,30 @@
               }
             },
             "url": {
-              "raw": "{{usuarioUrl}}/usuarios/{{funcionarioId}}",
+              "raw": "{{usuarioUrl}}/usuarios/me",
               "host": [
                 "{{usuarioUrl}}"
               ],
               "path": [
                 "usuarios",
-                "{{funcionarioId}}"
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar status de funcionário",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{usuarioUrl}}/usuarios/{{funcionarioId}}/funcionario",
+              "host": [
+                "{{usuarioUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{funcionarioId}}",
+                "funcionario"
               ]
             }
           }

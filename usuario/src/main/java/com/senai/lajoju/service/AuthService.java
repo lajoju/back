@@ -3,10 +3,10 @@ package com.senai.lajoju.service;
 import com.senai.lajoju.dto.LoginRequest;
 import com.senai.lajoju.dto.RegisterRequest;
 import com.senai.lajoju.dto.TokenResponse;
-import com.senai.lajoju.dto.RespostaUsuario;
-import com.senai.lajoju.mapper.MapeadorUsuario;
+import com.senai.lajoju.dto.UsuarioResponse;
+import com.senai.lajoju.mapper.UsuarioMapper;
 import com.senai.lajoju.model.Usuario;
-import com.senai.lajoju.repository.RepositorioUsuario;
+import com.senai.lajoju.repository.UsuarioRepository;
 import com.senai.lajoju.security.JwtUtil;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -22,13 +22,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
-	private final RepositorioUsuario users;
-	private final MapeadorUsuario userMapper;
+	private final UsuarioRepository users;
+	private final UsuarioMapper userMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtUtil jwtUtil;
 
 	@Transactional
-	public RespostaUsuario register(RegisterRequest request) {
+	public UsuarioResponse register(RegisterRequest request) {
 		String email = normalizeEmail(request.email());
 		if (users.existsByEmail(email)) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado.");

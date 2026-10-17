@@ -17,9 +17,9 @@ public class ClienteUsuarioService {
 		this.userClient = RestClient.builder().baseUrl(userBaseUrl).build();
 	}
 
-	public UsuarioRemotoResponse getUser(UUID id, String bearerToken) {
+	public UsuarioRemotoResponse getEmployeeStatus(UUID id, String bearerToken) {
 		return userClient.get()
-				.uri("/usuarios/{id}", id)
+				.uri("/usuarios/{id}/funcionario", id)
 				.header(HttpHeaders.AUTHORIZATION, bearerToken)
 				.retrieve()
 				.body(UsuarioRemotoResponse.class);

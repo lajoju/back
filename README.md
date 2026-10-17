@@ -42,6 +42,15 @@ validam com a chave pública. Como a chave privada está embutida no código, es
 configuração é adequada apenas para desenvolvimento e demonstração; não a use
 em produção.
 
+No serviço `usuario`, o perfil autenticado é consultado e atualizado por
+`GET /usuarios/me` e `PUT /usuarios/me`. A atualização aceita nome, e-mail e
+senha, mas não permite alterar o papel de funcionário. A consulta
+`GET /usuarios/{id}/funcionario` retorna somente essa indicação e é usada pelo
+serviço de agendamentos. Listagem, consulta geral, criação, atualização por ID
+e exclusão de usuários não ficam disponíveis pela API enquanto não houver um
+fluxo administrativo com autorização própria. Os funcionários de exemplo são
+inseridos pela migration de desenvolvimento.
+
 ## Documentação e testes
 
 - Swagger: `/swagger-ui/index.html` em cada serviço.

@@ -1,56 +1,54 @@
 package com.senai.lajoju.controller;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.senai.lajoju.dto.RequisicaoCriacaoUsuario;
-import com.senai.lajoju.dto.RespostaUsuario;
-import com.senai.lajoju.dto.RequisicaoAtualizacaoUsuario;
-import com.senai.lajoju.service.ServicoUsuario;
+import com.senai.lajoju.dto.AtualizacaoUsuarioRequest;
+import com.senai.lajoju.dto.FuncionarioStatusResponse;
+import com.senai.lajoju.dto.UsuarioResponse;
+import com.senai.lajoju.service.UsuarioService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
 
-	private final ServicoUsuario userService;
+	private final UsuarioService userService;
 
-	@GetMapping
-	public List<RespostaUsuario> findAll() {
-		return userService.findAll();
+	@GetMapping("/me")
+	public UsuarioResponse findMyProfile(@AuthenticationPrincipal Jwt jwt) {
+		return userService.findById(authenticatedUserId(jwt));
 	}
 
-	@GetMapping("/{id}")
-	public RespostaUsuario findById(@PathVariable UUID id) {
-		return userService.findById(id);
+	@PutMapping("/me")
+	public UsuarioResponse updateMyProfile(
+			@Valid @RequestBody AtualizacaoUsuarioRequest request,
+			@AuthenticationPrincipal Jwt jwt) {
+		return userService.updateProfile(authenticatedUserId(jwt), request);
 	}
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public RespostaUsuario create(@Valid @RequestBody RequisicaoCriacaoUsuario request) {
-		return userService.create(request);
+	@GetMapping("/{id}/funcionario")
+	public FuncionarioStatusResponse findEmployeeStatus(@PathVariable UUID id) {
+		return userService.findEmployeeStatus(id);
 	}
 
-	@PutMapping("/{id}")
-	public RespostaUsuario update(@PathVariable UUID id, @Valid @RequestBody RequisicaoAtualizacaoUsuario request) {
-		return userService.update(id, request);
-	}
-
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable UUID id) {
-		userService.delete(id);
+	private UUID authenticatedUserId(Jwt jwt) {
+		try {
+			return UUID.fromString(jwt.getClaimAsString("uid"));
+		} catch (IllegalArgumentException | NullPointerException exception) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token sem identificador de usuário válido.",
+					exception);
+		}
 	}
 }

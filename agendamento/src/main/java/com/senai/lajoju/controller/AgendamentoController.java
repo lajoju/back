@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -46,7 +47,7 @@ public class AgendamentoController {
 			@Valid @RequestBody AgendamentoRequest request,
 			@RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken,
 			@AuthenticationPrincipal Jwt jwt) {
-		return appointmentService.create(request, bearerToken, jwt.getSubject());
+		return appointmentService.create(request, bearerToken, authenticatedUserId(jwt));
 	}
 
 	@PutMapping("/{id}")
@@ -55,12 +56,21 @@ public class AgendamentoController {
 			@Valid @RequestBody AgendamentoRequest request,
 			@RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken,
 			@AuthenticationPrincipal Jwt jwt) {
-		return appointmentService.update(id, request, bearerToken, jwt.getSubject());
+		return appointmentService.update(id, request, bearerToken, authenticatedUserId(jwt));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable UUID id) {
 		appointmentService.delete(id);
+	}
+
+	private UUID authenticatedUserId(Jwt jwt) {
+		try {
+			return UUID.fromString(jwt.getClaimAsString("uid"));
+		} catch (IllegalArgumentException | NullPointerException exception) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+					"Token sem identificador de usuário válido.", exception);
+		}
 	}
 }
