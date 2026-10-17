@@ -9,15 +9,18 @@ import org.springframework.stereotype.Component;
 public class ProdutoMapper {
 
 	public Produto toModel(ProdutoRequest request) {
-		return new Produto(request.name().trim(), request.tempoMedioMinutos(), request.price());
+		return new Produto(request.name().trim(), request.description().trim(),
+				request.tempoMedioMinutos(), request.price());
 	}
 
 	public ProdutoResponse toResponse(Produto product) {
 		return new ProdutoResponse(
-				product.getIdentificador(), product.getNome(), product.getTempoMedioMinutos(), product.getPreco());
+				product.getIdentificador(), product.getNome(), product.getDescricao(),
+				product.getTempoMedioMinutos(), product.getPreco());
 	}
 
 	public void update(Produto product, ProdutoRequest request) {
-		product.update(request.name().trim(), request.tempoMedioMinutos(), request.price());
+		product.update(request.name().trim(), request.description().trim(),
+				request.tempoMedioMinutos(), request.price());
 	}
 }
