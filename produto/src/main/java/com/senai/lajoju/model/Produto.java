@@ -27,20 +27,25 @@ public class Produto {
 	@Column(name = "nome", nullable = false, length = 120)
 	private String nome;
 
+	@Column(name = "descricao", nullable = false, length = 1000)
+	private String descricao;
+
 	@Column(name = "tempo_medio_minutos", nullable = false)
 	private int tempoMedioMinutos;
 
 	@Column(name = "preco", nullable = false, precision = 10, scale = 2)
 	private BigDecimal preco;
 
-	public Produto(String nome, int tempoMedioMinutos, BigDecimal preco) {
+	public Produto(String nome, String descricao, int tempoMedioMinutos, BigDecimal preco) {
 		this.nome = nome;
+		this.descricao = descricao;
 		this.tempoMedioMinutos = tempoMedioMinutos;
 		this.preco = preco;
 	}
 
-	public void update(String nome, int tempoMedioMinutos, BigDecimal preco) {
+	public void update(String nome, String descricao, int tempoMedioMinutos, BigDecimal preco) {
 		this.nome = nome;
+		this.descricao = descricao;
 		this.tempoMedioMinutos = tempoMedioMinutos;
 		this.preco = preco;
 	}

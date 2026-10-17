@@ -319,7 +319,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Corte Postman\",\n  \"tempoMedioMinutos\": 45,\n  \"price\": 35.00\n}",
+              "raw": "{\n  \"name\": \"Corte Postman\",\n  \"description\": \"Corte de cabelo realizado conforme o estilo escolhido pelo cliente.\",\n  \"tempoMedioMinutos\": 45,\n  \"price\": 35.00\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -365,7 +365,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Corte Postman Atualizado\",\n  \"tempoMedioMinutos\": 50,\n  \"price\": 40.00\n}",
+              "raw": "{\n  \"name\": \"Corte Postman Atualizado\",\n  \"description\": \"Corte de cabelo com finalização personalizada.\",\n  \"tempoMedioMinutos\": 50,\n  \"price\": 40.00\n}",
               "options": {
                 "raw": {
                   "language": "json"
